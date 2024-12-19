@@ -1,0 +1,7 @@
+Flask
+mysql-connector-python
+flask-mysqldb
+python-dotenv
+flask-cors
+flask-bcrypt
+reportlab

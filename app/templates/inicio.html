@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Productos</title>
+    <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='inicio.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
+
+</head>
+<body>
+
+
+
+    <div id="mainMenu" style="display: none;">
+        <div class="menu-container">
+            <h1 style="font-family: 'GFS Didot', serif;">Menú Principal</h1>
+
+            <button onclick="showProductManagement()">Gestión de Productos</button>
+            <button onclick="generateReport()">Generar Reporte</button>
+            <div class="menu-container1">
+                <button onclick="logout()">Cerrar Sesión</button>
+            </div>
+            
+        </div>
+    </div>
+    
+
+    <div id="pdfContainer" style="display: none; margin: 20px auto; width: 80%; height: 500px; border: 1px solid black;">
+        <button onclick="returnToMenu()" style="background-color: #9a8d84; color: rgb(0, 0, 0); ">Volver al Menú</button>
+        <button id="filterButton" onclick="showFilterModal()">Filtros</button> <!-- Botón de filtros -->
+        <iframe id="pdfViewer" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+    </div>
+    
+    <!-- Modal de Filtros -->
+    <div id="filterModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000; text-align: center;">
+        <div style="background: white; margin-top: 50px; padding: 20px; width: 400px; display: inline-block;">
+            <h3>Filtros para Reporte</h3>
+            <form id="filterForm">
+                <label for="codigo">Código:</label>
+                <input type="text" id="codigo" name="codigo">
+                <label for="producto">Producto:</label>
+                <input type="text" id="producto" name="producto">
+                <label for="categoria">Categoría:</label>
+                <input type="text" id="categoria" name="categoria">
+                <label for="stockMin">Stock mínimo:</label>
+                <input type="number" id="stockMin" name="stockMin">
+                <label for="stockMax">Stock máximo:</label>
+                <input type="number" id="stockMax" name="stockMax">
+                <button type="button" onclick="applyFilters()">Aplicar Filtros</button>
+                <button type="button" onclick="closeFilterModal()">Cerrar</button>
+            </form>
+        </div>
+    </div>
+    
+    
+    
+
+    <div id="loginModal" style="display: block;">
+        <img id="modalImage" src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Imagen" />
+        <form id="loginForm">
+            <h2>Iniciar Sesión</h2>
+            <input type="text" id="username" placeholder="Nombre de usuario" required>
+            <input type="password" id="password" placeholder="Contraseña" required>
+            <button type="submit">Iniciar Sesión</button>
+        </form>
+        <p id="loginError" style="color: red; display: none;">Credenciales incorrectas</p>
+    </div>
+    
+    
+        
+    
+    <div id="appContent" style="display: none;">
+        <button onclick="returnToMenu()" style="background-color: #9a8d84; color: rgb(0, 0, 0); ">Volver al Menú</button>
+        <div class="container">
+            <h1 style="font-family: 'GFS Didot', serif; font-size: 35px;">Lista de Productos</h1>
+
+            <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+                <button id="addProductButton" onclick="openProductModal()" style="font-size: 18px;">Agregar Producto</button>
+                <button id="lotsButton" onclick="openLotModal()" style="font-size: 18px;">Lotes</button>
+                <!-- Botón de Cerrar Sesión -->
+                <button id="logoutButton" style="background-color: #f44336; color: white; ">Cerrar Sesión</button>
+            </div>
+    
+            <table id="productTable" border="1">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Categoría</th>
+                        <th>Imagen</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="productList">
+                    <!-- Productos cargados dinámicamente -->
+                </tbody>
+            </table>
+            <div id="pagination" style="text-align: center; margin-top: 20px;"></div>
+        </div>
+
+
+
+
+        <!-- Modal de opciones (Agregar, Editar, Eliminar) -->
+        <div id="productModal" style="display: none;" class="modal">
+            <div class="modal-content">
+                <div class="tab-buttons">
+                    <button class="tab-button" onclick="openTab('add')">Agregar Producto</button>
+                    <button class="tab-button" onclick="openTab('delete')">Eliminar Producto</button>  
+
+                    <button class="tab-button" onclick="openTab('detail')">Detalle Producto</button>
+                    
+                </div>
+                <button onclick="closeProductModal()" style="background-color: #f44336; color: white; ">Cerrar</button>
+    
+                <!-- Contenido de cada pestaña -->
+                <div id="addTab" class="tab-content">
+                    <form id="productForm">
+                        <input type="hidden" id="productId">
+                        <input type="text" id="name" placeholder="Nombre" required>
+                        <input type="text" id="description" placeholder="Descripción" required>
+                        <input type="number" id="quantity" placeholder="Cantidad" required>
+                        <input type="number" id="price" placeholder="Precio" required>
+                        <input type="text" id="category" placeholder="Categoría" required>
+                        <input type="text" id="image" placeholder="URL de Imagen" required>
+                        <button type="submit">Guardar</button>
+                        <button class="closeModalButton1" type="button" onclick="closeModal()">Cancelar</button>
+                    </form>
+                </div>
+    
+                <div id="editTab" class="tab-content" style="display:none;">
+                    <form id="editProductForm">
+                        <input type="number" id="editProductCode" placeholder="Introduce el Código" required>
+                        <button type="button" onclick="loadProductForEditing()">Cargar Producto</button>
+                        <input type="text" id="editName" placeholder="Producto" required>
+                        <input type="text" id="editDescription" placeholder="Descripción" required>
+                        <input type="number" id="editQuantity" placeholder="Stock" required>
+                        <input type="number" id="editPrice" placeholder="Precio Unitario" required>
+                        <input type="text" id="editCategory" placeholder="Categoría" required>
+                        <input type="text" id="editImage" placeholder="Imagen URL" required>
+                        <button type="submit">Guardar</button>
+                        <button class="closeModalButton1" type="button" onclick="closeModal()">Cancelar</button>
+                    </form>
+                </div>
+                 
+                <div id="deleteTab" class="tab-content" style="display:none;">
+                    <form id="deleteProductForm">
+                        <label for="deleteProductCode">Código del Producto:</label>
+                        <input type="number" id="deleteProductCode" placeholder="Introduce el código" required>
+                        <button type="submit">Eliminar</button>
+                        <button class="closeModalButton1" type="button" onclick="closeModal()">Cancelar</button>
+                    </form>
+                </div>
+                
+                <div id="detailTab" class="tab-content" style="display:none;">
+                    <form id="detailProductForm">
+                        <input type="number" id="detailProductCode" placeholder="Introduce el Código del Producto" required>
+                        <button type="submit">Cargar Detalle</button>
+                        <button class="closeModalButton1" type="button" onclick="closeModal()">Cancelar</button>
+                    </form>
+                    <div id="detailProductInfo" style="margin-top: 20px;">
+                        <!-- Información del producto cargada dinámicamente -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="lotModal" style="display: none;">
+            <div class="tab-buttons">
+                <button class="tab-button" onclick="openLotTab('addLotTab')">Agregar Lote</button>
+                <button class="tab-button" onclick="openLotTab('editLotTab')">Editar Lote</button>
+                <button class="tab-button" onclick="openLotTab('deleteLotTab')">Eliminar Lote</button>
+            </div>
+            <div id="lotModalContent">
+                <!-- Contenido dinámico del modal de lotes -->
+            </div>
+            <!-- Contenido de cada pestaña -->
+            <div id="addLotTab" class="tab-content">
+                <form id="addLotForm">
+                    <input type="number" id="productCode" placeholder="Código del Producto" required>
+                    <input type="text" id="lotName" placeholder="Nombre del Lote" required>
+                    <input type="date" id="expiryDate" placeholder="Fecha de Vencimiento" required>
+                    <input type="number" id="stock" placeholder="Cantidad" required>
+                    <button type="submit">Guardar</button>
+                    <button class="closeModalButton1" type="button" onclick="closeLotModal()">Cancelar</button>
+                </form>
+            </div>
+    
+            <div id="editLotTab" class="tab-content" style="display:none;">
+                <form id="editLotForm">
+                    <input type="number" id="editLotId" placeholder="ID del Lote" required>
+                    <button type="button" onclick="loadLotForEditing()">Cargar Lote</button>
+                    <input type="text" id="editLotName" placeholder="Nombre del Lote" required>
+                    <input type="date" id="editExpiryDate" placeholder="Fecha de Vencimiento" required>
+                    <input type="number" id="editStock" placeholder="Cantidad" required>
+                    <button type="submit">Guardar</button>
+                    <button class="closeModalButton1" type="button" onclick="closeLotModal()">Cancelar</button>
+                </form>
+            </div>
+    
+            <div id="deleteLotTab" class="tab-content" style="display:none;">
+                <form id="deleteLotForm">
+                    <label for="deleteLotId">ID del Lote:</label>
+                    <input type="number" id="deleteLotId" placeholder="Introduce el ID del Lote" required>
+                    <button type="submit">Eliminar</button>
+                    <button class="closeModalButton1" type="button" onclick="closeLotModal()">Cancelar</button>
+                </form>
+            </div>
+
+            <button onclick="closeLotModal()" style="background-color: #f44336; color: white; ">Cerrar</button>
+        </div>
+        
+
+        
+        
+    </div>
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.2.8/pdfobject.min.js"></script>
+    <script>
+        const images = [
+            "{{ url_for('static', filename='images/imagenmenu1.avif') }}",
+            "{{ url_for('static', filename='images/imagenmenu2.avif') }}",
+            "{{ url_for('static', filename='images/imagenmenu3.avif') }}",
+            "{{ url_for('static', filename='images/imagenmenu4.avif') }}",
+            "{{ url_for('static', filename='images/imagenmenu5.avif') }}",
+            "{{ url_for('static', filename='images/imagenmenu6.avif') }}",
+            "{{ url_for('static', filename='images/imagenmenu7.avif') }}",
+            "{{ url_for('static', filename='images/imagenmenu8.avif') }}",
+            "{{ url_for('static', filename='images/imagenmenu9.avif') }}",
+            "{{ url_for('static', filename='images/imagenmenu10.avif') }}",
+        ];
+        </script>
+        
+    <script src="/js/inicio.js"></script>
+</body>
+</html>

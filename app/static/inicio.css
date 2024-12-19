@@ -1,0 +1,588 @@
+body {
+    font-family: 'GFS Didot', serif, bold;
+    font-size: 17px;
+    background-color: #f5f5f5; /* Blanco mármol */
+    background: linear-gradient(135deg, #f5f5f5, #e2e2e2); /* Fondo sutil degradado */
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 80px;
+    background-color: #fff;
+    border: 1px solid #000; /* Línea clara */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+
+}
+
+
+h1 {
+
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+}
+
+/* Tabla de Productos */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd; /* Línea sutil en celdas */
+}
+
+th {
+    background-color: #000;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Estilo de los botones dentro de la aplicación */
+button {
+    font-family: 'GFS Didot', serif;
+    font-size: 14px;
+    padding: 10px 20px;
+    border: 1px solid #000;
+    background-color: #D0CAC6; /* Timberwolf */
+    color: #000;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 2px;
+}
+
+button:disabled {
+    background-color: #ccc;
+}
+
+button:hover {
+    background-color: #A29F96; /* Un tono más oscuro para el hover */
+    color: #fff;
+}
+
+
+#productModal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: white;
+    padding: 30px;
+    border: 1px solid #000;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    width: 60%; /* Aumenta el ancho del modal */
+    max-width: 800px; /* Aumenta el ancho máximo */
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+#productForm {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #000;
+    width: 300px;
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    margin: 15px 0;
+    border: 1px solid #000; /* Línea más notoria */
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+button[type="submit"], button[type="button"] {
+    width: 48%;
+    margin-top: 15px;
+}
+
+/* Estilo específico para la columna de Imagen */
+td:nth-child(7) { /* Asegúrate de que esta es la columna correcta */
+    width: 170px; /* Ancho más grande para la celda de la imagen */
+    height: 170px; /* Define una altura para la celda */
+    text-align: center; /* Centrar la imagen horizontalmente */
+    vertical-align: middle; /* Centrar la imagen verticalmente */
+}
+
+td img {
+    width: 100%; /* Ajustar la imagen al ancho de la celda */
+    height: 100%; /* Ajustar la imagen a la altura de la celda */
+    object-fit: contain; /* Mantener la relación de aspecto sin que se salga de la celda */
+    max-width: 100%; /* No exceder el tamaño máximo de la celda */
+    max-height: 100%; /* No exceder la altura de la celda */
+}
+
+.details-image {
+    width: 29px;  /* Ajusta el tamaño según sea necesario */
+    height: 29px; /* Ajusta el tamaño según sea necesario */
+    cursor: pointer;  /* Muestra un cursor de mano cuando se pasa sobre la imagen */
+    transition: transform 0.3s ease;  /* Agrega un efecto al pasar el ratón */
+    transform: translateY(3px);  /* Baja la imagen 1px */
+}
+
+.details-image:hover {
+    transform: scale(1.2) translateY(1px);  /* Aumenta el tamaño de la imagen y mantiene la posición baja al pasar el ratón */
+}
+
+
+.edit-image {
+    width: 35px;  /* Ajusta el tamaño de la imagen */
+    cursor: pointer;  /* Cambia el cursor para indicar que es clickeable */
+    transition: transform 0.3s ease;  /* Agrega una transición al hacer hover */
+}
+
+.edit-image:hover {
+    transform: scale(1.2);  /* Amplía la imagen al pasar el ratón */
+}
+
+
+#productModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: white;
+    padding: 30px;
+    border: 1px solid #000; /* Línea más notoria */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Estilo de la imagen en el modal */
+#modalImage {
+    position: absolute;
+    top: 50%; /* Centra verticalmente */
+    left:35%; /* Mueve la imagen un poco hacia la izquierda */
+    transform: translate(-50%, -50%); /* Centra la imagen correctamente */
+    width: 550px; /* Aumenta el tamaño de la imagen */
+    height: auto; /* Mantiene la relación de aspecto */
+    z-index: 10; /* Asegura que la imagen esté por encima del formulario */
+    border-radius: 50%;
+}
+
+
+/* Modal de Login */
+#loginModal {
+    display: block;
+    position: fixed;
+    top: 0;
+    right: 70px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro pero transparente */
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilo del formulario de login */
+#loginForm {
+    background-color: white;
+    padding: 40px;
+    border: 1px solid #ddd; /* Bordes suaves */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    
+    position: absolute;
+    top: 50%;
+    right: 40px;
+    transform: translateY(-50%);
+    border-radius: 10px; /* Bordes redondeados */
+    box-sizing: border-box;
+}
+
+
+#loginForm input[type="text"],
+#loginForm input[type="password"] {
+    width: 100%;
+    padding: 15px;
+    margin: 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #f9f9f9; /* Fondo claro para inputs */
+    box-sizing: border-box;
+    transition: border 0.3s ease;
+}
+
+#loginForm input[type="text"]:focus,
+#loginForm input[type="password"]:focus {
+    border: 1px solid #000; /* Resaltar bordes cuando estén en foco */
+}
+
+#loginForm button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    background-color: #333; /* Fondo negro */
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#loginForm button:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+/* Estilo del mensaje de error */
+#loginError {
+    margin-top: 10px;
+    font-size: 14px;
+    color: red;
+    display: none;
+}
+
+
+#logoutButton {
+    padding: 10px 10px;
+    margin: 20px 0;
+    border: 1px solid #000;
+    background-color: #f44336;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    position: absolute; /* Para posicionarlo respecto a su contenedor */
+    top: -20px; /* Ajusta la distancia desde arriba */
+    right: 0px; /* Ajusta la distancia desde la derecha */
+}
+
+
+#logoutButton:hover {
+    background-color: #992222;
+}
+
+/* Contenedor del Menú Principal */
+.menu-container {
+    text-align: center;
+    margin: 50px auto;
+    padding: 30px;
+    background: linear-gradient(145deg, #ffffff, #e6e6e6); /* Fondo degradado claro */
+    color: #000;
+    border: 1px solid #ccc;
+    border-radius: 1px; /* Bordes redondeados */
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2); /* Sombra */
+    width: 320px;
+    animation: fadeIn 0.8s ease-in-out; /* Animación de entrada */
+}
+
+/* Botones del Menú */
+.menu-container button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    margin: 15px 0;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 10px; /* Bordes redondeados */
+    transition: transform 0.2s, background-color 0.3s; /* Transiciones suaves */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.menu-container button:hover {
+    background-color: #45a049;
+    transform: scale(1.05); /* Efecto de ampliación */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Sombra más intensa */
+}
+
+
+
+.menu-container1 button {
+    background-color: #d0cac6 !important;
+    color: rgb(0, 0, 0) !important;
+}
+
+/* Cambio de color al pasar el ratón (hover) */
+.menu-container1 button:hover {
+    background-color: #5A5149;  /* Rojo más oscuro */
+}
+
+
+/* Fondo del contenedor */
+.menu-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Para no interferir con el contenido del menú */
+    background-size: cover; /* Ajustar la imagen al tamaño del contenedor */
+    background-position: center; /* Centrar la imagen */
+    animation: pageTurn 1s ease-in-out; /* Animación de transición */
+    transform-origin: left center; /* Punto de origen para la rotación */
+}
+
+/* Animación de pasar página */
+@keyframes pageTurn {
+    0% {
+        transform: rotateY(90deg) scale(0.9); /* Inicio: doblado hacia atrás */
+        opacity: 0; /* Invisible */
+    }
+    50% {
+        transform: rotateY(45deg) scale(1.05); /* Medio: ligeramente hacia adelante */
+        opacity: 0.5; /* Parcialmente visible */
+    }
+    100% {
+        transform: rotateY(0deg) scale(1); /* Final: posición normal */
+        opacity: 1; /* Totalmente visible */
+    }
+}
+
+
+
+
+.menu-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.menu-container button {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
+    padding: 15px 25px;
+    margin: 15px 0;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 7px;
+}
+
+.menu-container button:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+
+
+/* Contenedor principal para el pdf */
+#pdfContainer {
+    background-color: #fff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #000;
+    margin: 20px auto;
+    width: 80%; /* Ocupa el 80% del ancho */
+    height: calc(100vh - 40px); /* Ocupa todo el alto disponible menos el margen */
+    display: flex;
+    flex-direction: column; /* Organiza los elementos de manera vertical */
+}
+
+/* Asegura que el iframe ocupe todo el espacio dentro de pdfContainer */
+#pdfContainer iframe {
+    flex: 1; /* Hace que el iframe ocupe todo el espacio restante */
+    width: 100%; /* Ocupa el 100% del ancho */
+    height: 100%; /* Ocupa el 100% de la altura disponible */
+}
+
+
+/* Estilo del Modal */
+#productModal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: white;
+    padding: 20px; /* Reducir el padding */
+    border: 1px solid #000;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    width: 50%; /* Reducir el ancho del modal */
+    max-width: 600px; /* Ancho máximo */
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+/* Estilo de los botones dentro del modal */
+.tab-buttons {
+    display: flex;
+    justify-content: space-between; /* Asegura separación uniforme */
+    gap: 10px; /* Agrega espacio entre los botones */
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    padding: 10px 20px; /* Ajusta el tamaño del botón */
+    background-color: #000;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+.tab-button:hover {
+    background-color: #333;
+}
+
+/* Contenido de las pestañas */
+.tab-content {
+    display: none;
+    margin-top: 15px; /* Reducir el margen */
+}
+
+.tab-content form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Entrada de los campos del formulario */
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 10px; /* Reducir el padding */
+    margin: 10px 0;
+    border: 1px solid #000;
+    font-size: 14px; /* Reducir el tamaño de la fuente */
+    border-radius: 5px;
+}
+
+/* Botones dentro de las pestañas */
+button[type="submit"], button[type="button"] {
+    width: 48%;
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    font-size: 14px; /* Reducir el tamaño de la fuente */
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button[type="submit"]:hover, button[type="button"]:hover {
+    background-color: #333;
+}
+
+/* Cerrar el modal */
+.closeModalButton1 {
+    background-color: #f44336;
+    color: #fff;
+}
+
+.closeModalButton1:hover {
+    background-color: #d32f2f;
+}
+
+
+/* Hacer que la imagen sea interactiva */
+#imageButton {
+    width: 150px; /* Ajusta el tamaño según lo necesario */
+    height: auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#imageButton:hover {
+    transform: scale(1.1); /* Ampliar ligeramente al pasar el mouse */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Añadir sombra */
+}
+
+#imageButton:active {
+    transform: scale(0.95); /* Reducir tamaño al hacer clic */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Reducir sombra */
+}
+
+#productDetail {
+    display: none;
+}
+
+#productDetailForm {
+    margin-top: 20px;
+}
+
+#productDetailInfo {
+    margin-top: 20px;
+    border: 1px solid #000;
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
+#lotModal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: white;
+    padding: 30px;
+    border: 1px solid #000;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    width: 60%; /* Ajusta el ancho del modal */
+    max-width: 800px; /* Ancho máximo */
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+#lotModal .tab-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#lotModal .tab-button {
+    padding: 10px 20px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#lotModal .tab-button:hover {
+    background-color: #333;
+}
+
+#lotModal .tab-content {
+    display: none;
+    margin-top: 15px;
+}
